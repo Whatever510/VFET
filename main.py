@@ -4,4 +4,11 @@ import tkinter
 
 
 
-print("Hello World")
+class FrameExtraction:
+
+    def __init__(self,window,window_title):
+        self.window = window
+        self.window_title = window_title
+
+        self.window.mainloop()
+
