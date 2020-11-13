@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 import argparse
 import os
-
+import string
+import random
 
 
 
@@ -28,6 +29,7 @@ def run():
     nbrs_of_frames = 1
     show_help = True
     save_remaining = 0
+    runningIndex = 0
 
     while(True):
         
@@ -55,6 +57,7 @@ def run():
                                 1, (0,0,255) , 2, cv2.LINE_AA)
             frame = cv2.putText(frame, "[+/-] Amount of frames saved after key pressed  = {}".format(nbrs_of_frames), (50,150), cv2.FONT_HERSHEY_SIMPLEX,
                                 1, (0,0,255) , 2, cv2.LINE_AA)
+
             frame = cv2.putText(frame, "[s] If you press r the video will start",
                                 (50, 200), cv2.FONT_HERSHEY_SIMPLEX,
                                 1, (0, 0, 255), 2, cv2.LINE_AA)
@@ -62,7 +65,9 @@ def run():
             cv2.destroyAllWindows()
             break
 
+        cv2.imshow('image', frame)
         c = cv2.waitKey(int(cap.get(cv2.CAP_PROP_FPS)))
+
         if c != -1:
             if c == 27:
                 cv2.destroyAllWindows()
@@ -80,12 +85,30 @@ def run():
             if c == 32 or c == 's':
                 save_remaining = nbrs_of_frames
             if c == 112:
-                frame = cv2.putText(frame, "VIDEO PAUSED\n PRESS ANY KEY TO CONTINUE",
+                frame = cv2.putText(frame, "VIDEO PAUSED.",
                                     (120, height//2), cv2.FONT_HERSHEY_SIMPLEX,
-                                    5, (0, 0, 255), 5, cv2.LINE_AA)
+                                    3, (0, 0, 255), 2, cv2.LINE_AA)
+                frame = cv2.putText(frame, "PRESS ANY KEY TO CONTINUE",
+                                    (120, height // 2+80), cv2.FONT_HERSHEY_SIMPLEX,
+                                    2, (0, 0, 255), 2, cv2.LINE_AA)
+
+                cv2.imshow('image',frame)
                 cv2.waitKey(-1)
 
-            cv2.imshow('image', frame)
+        if save_remaining != 0:
+                if random_name:
+                    letters = string.ascii_lowercase
+                    filename = ''.join(random.choice(letters) for i in range(10))+".jpg"
+
+                else:
+                    filename = output_loc + str(runningIndex) + ".jpg"
+                    runningIndex += 1
+
+                cv2.imwrite(filename,saveFrame)
+                save_remaining -= 1
+
+
+
 
         print(save_remaining)
 
