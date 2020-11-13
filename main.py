@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+""" This script provides an easy way to extract frames from a  video. It can be used to get good images for ML training"""
+__author__ = "Adrian"
+__version__ = "1.0"
+
 import cv2
 import numpy as np
 import argparse
@@ -6,10 +11,13 @@ import string
 import random
 
 
-
+""" Main loop. Iterates over all the frames in the video"""
 def run():
+
+    #Get the input file name and the save location
     input_name, output_loc = opt.source,opt.output
-    
+
+    #Check if file and output location exits. If not, ask to create the save location
     if not os.path.isfile(input_name):
         print("[ERROR] Could not find file {}. Please check your input".format(input_name))
         exit()
@@ -21,6 +29,7 @@ def run():
         else:
             exit()
 
+    #Some needed local variables
     cap = cv2.VideoCapture(input_name)
     ret, frame = cap.read()
     height,width,_ = frame.shape
@@ -31,8 +40,10 @@ def run():
     save_remaining = 0
     runningIndex = 0
 
+    #main loop
     while(True):
-        
+
+        #check if the user pressed start. if not show a black screen with the diffrent settings
         if started:
             _, saveFrame = cap.read()
             frame = saveFrame.copy()
@@ -68,6 +79,7 @@ def run():
         cv2.imshow('image', frame)
         c = cv2.waitKey(int(cap.get(cv2.CAP_PROP_FPS)))
 
+        #Key logical for the diffrent actions
         if c != -1:
             if c == 27:
                 cv2.destroyAllWindows()
@@ -95,10 +107,11 @@ def run():
                 cv2.imshow('image',frame)
                 cv2.waitKey(-1)
 
+        #Save the frames
         if save_remaining != 0:
                 if random_name:
                     letters = string.ascii_lowercase
-                    filename = ''.join(random.choice(letters) for i in range(10))+".jpg"
+                    filename = output_loc + ''.join(random.choice(letters) for i in range(10))+".jpg"
 
                 else:
                     filename = output_loc + str(runningIndex) + ".jpg"
@@ -108,12 +121,7 @@ def run():
                 save_remaining -= 1
 
 
-
-
         print(save_remaining)
-
-
-
 
 
 
