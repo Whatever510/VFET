@@ -29,7 +29,7 @@ def run():
         else:
             exit()
 
-    #Some needed local variables
+    #Some required local variables
     cap = cv2.VideoCapture(input_name)
     ret, frame = cap.read()
     height,width,_ = frame.shape
@@ -111,10 +111,10 @@ def run():
         if save_remaining != 0:
                 if random_name:
                     letters = string.ascii_lowercase
-                    filename = output_loc + ''.join(random.choice(letters) for i in range(10))+".jpg"
+                    filename = output_loc + ''.join(random.choice(letters) for i in range(10))+".png"
 
                 else:
-                    filename = output_loc + str(runningIndex) + ".jpg"
+                    filename = output_loc + str(runningIndex) + ".png"
                     runningIndex += 1
 
                 cv2.imwrite(filename,saveFrame)
